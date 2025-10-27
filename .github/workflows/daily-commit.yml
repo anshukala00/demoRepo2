@@ -1,21 +1,31 @@
-name: Daily Commit (anshukalacs00@gmail.com)
+name: Daily Commit (24f2003004@ds.study.iitm.ac.in)
 
 on:
   schedule:
-    - cron: '30 5 * * *'  # Runs every day at 05:30 UTC (specific hour and minute)
+    - cron: '30 5 * * *'  # Runs daily at 05:30 UTC (specific hour & minute)
+  workflow_dispatch:      # Allows manual triggering for testing
 
 jobs:
   commit_job:
+    name: Commit Task (24f2003004@ds.study.iitm.ac.in)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Add a dummy commit from anshukalacs00@gmail.com
+      - name: Make a dummy change
         run: |
-          echo "Updated on $(date)" >> daily_log.txt
-          git config user.name "GitHub Actions Bot"
-          git config user.email "anshukalacs00@gmail.com"
-          git add daily_log.txt
-          git commit -m "Automated daily commit ($(date))" || echo "No changes to commit"
-          git push
+          echo "Last run on $(date -u)" > daily_commit_log.txt
+
+      - name: Commit and push changes for email 24f2003004@ds.study.iitm.ac.in
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "24f2003004@ds.study.iitm.ac.in"
+          git add daily_commit_log.txt
+          git commit -m "Automated daily commit on $(date -u)" || echo "No changes to commit"
+          git pull origin main --rebase
+          git push origin HEAD:main
